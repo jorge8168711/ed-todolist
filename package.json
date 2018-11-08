@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel ./server.js -d ./public",
-    "start": "npm run build && nodemon ./public/server.js"
+    "start": "nodemon --exec babel-node src/server.js",
+    "build": "babel src/server.js --out-dir dist",
+    "serve": "node dist/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +20,6 @@
     "@babel/core": "^7.1.5",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
-    "babel-cli": "^6.26.0",
     "babelify": "^10.0.0",
     "nodemon": "^1.18.6"
   }
