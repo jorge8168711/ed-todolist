@@ -10,6 +10,8 @@ html(lang="es")
     link(rel="stylesheet", href="./style.css")
   body
     block content
-
+    //- permite hacer live reload con el plugin "ack-reload" que esta
+    //- configurado en servidor server.js, se debe comentar cuando se hace
+    //- deploy a producción
     script(src="/reload/reload.js")
     script(src="/script.js")
