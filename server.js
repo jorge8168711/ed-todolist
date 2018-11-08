@@ -1,7 +1,16 @@
-const express = require('express')
-const app = express()
+import http from 'http'
+import express from 'express'
 
-app.use(express.static('public'))
-app.listen(process.env.PORT || 8080, () => {
-  console.log('All is ok')
-})
+const port = process.env.PORT || 8080
+
+const app = express()
+app
+  .set( 'port', port )
+  .use(express.static('public'))
+
+const server = http.createServer(app)
+
+server.listen(
+  app.get('port'),
+  () => console.log(`Iniciando Aplicación Isomórfica JavaScript en el puerto ${app.get('port')}`)
+)
