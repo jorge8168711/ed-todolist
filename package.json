@@ -6,21 +6,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "nodemon --watch src -e pug,scss,js,json --exec babel-node server.js",
-    "browserify": "browserify ./src/js/index.js -d -o ./public/script.js -t [babelify --presets [ env ]",
-    "watchify": "watchify ./src/js/index.js -d -o ./public/script.js -t [babelify --presets [ env ] -v",
+    "watchify": "watchify src/js/index.js -o public/script.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] --plugins [ @babel/plugin-proposal-class-properties ] ] -v",
+    "browserify": "browserify src/js/index.js -o public/script.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] --plugins [ @babel/plugin-proposal-class-properties ] ]",
     "start": "npm run watchify | npm run serve"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babel": "^6.23.0",
     "express": "^4.16.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.5",
     "@babel/node": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.1.5",
+    "@babel/preset-react": "^7.0.0",
     "ack-reload": "^2.0.12",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
