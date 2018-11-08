@@ -1,0 +1,1 @@
+console.error("\n/Users/jorgebarron/Google Drive/PersonalRepos/edTodoList/src/js/index.js:1\nimport suma from './suma'\n^\nParseError: 'import' and 'export' may appear only with 'sourceType: module'");

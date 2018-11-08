@@ -2,12 +2,13 @@
   "name": "ed-todolist",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "package.json",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node src/server.js",
-    "build": "babel src/server.js --out-dir dist",
-    "serve": "node dist/server.js"
+    "serve": "nodemon --watch src -e pug,scss,js,json --exec babel-node server.js",
+    "browserify": "browserify ./src/js/index.js -d -o ./public/script.js -t [babelify --presets [ env ]",
+    "watchify": "watchify ./src/js/index.js -d -o ./public/script.js -t [babelify --presets [ env ] -v",
+    "start": "npm run watchify | npm run serve"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +21,13 @@
     "@babel/core": "^7.1.5",
     "@babel/node": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
+    "ack-reload": "^2.0.12",
     "babelify": "^10.0.0",
-    "nodemon": "^1.18.6"
+    "browserify": "^16.2.3",
+    "node-sass-middleware": "^0.11.0",
+    "nodemon": "^1.18.6",
+    "pug": "^2.0.3",
+    "serve-favicon": "^2.5.0",
+    "watchify": "^3.11.0"
   }
 }
