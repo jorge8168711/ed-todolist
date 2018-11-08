@@ -8,7 +8,9 @@
     "serve": "nodemon --watch src -e pug,scss,js,json --exec babel-node server.js",
     "watchify": "watchify src/js/index.js -o public/script.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] --plugins [ @babel/plugin-proposal-class-properties ] ] -v",
     "browserify": "browserify src/js/index.js -o public/script.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] --plugins [ @babel/plugin-proposal-class-properties ] ]",
-    "start": "npm run watchify | npm run serve"
+    "start": "npm run watchify | npm run serve",
+    "heroku-prebuild": "export NPM_CONFIG_PRODUCTION=false; export NODE_ENV=; NPM_CONFIG_PRODUCTION=false NODE_ENV=development npm install --only=dev --dev",
+    "heroku-postbuild": "export NPM_CONFIG_PRODUCTION=true; export NODE_ENV=production;"
   },
   "author": "",
   "license": "ISC",
