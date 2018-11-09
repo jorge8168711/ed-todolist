@@ -7,13 +7,13 @@
     "heroku-prebuild": "export NPM_CONFIG_PRODUCTION=false; export NODE_ENV=; NPM_CONFIG_PRODUCTION=false NODE_ENV=development npm install --only=dev --dev",
     "heroku-postbuild": "export NPM_CONFIG_PRODUCTION=true; export NODE_ENV=production;",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "nodemon --watch src -e pug,scss,js,json --exec babel-node server.js",
+    "watch-server": "nodemon --watch src -e pug,scss,js,json --exec babel-node server.js",
     "watchify": "watchify src/js/index.js -o public/script.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] --plugins [ @babel/plugin-proposal-class-properties ] ] -v",
     "browserify": "browserify src/js/index.js -o public/script.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] --plugins [ @babel/plugin-proposal-class-properties ] ]",
     "uglify": "uglifyjs ./public/script.js -c -o ./public/script.js",
-    "autoprefixer": "postcss --use autoprefixer --autoprefixer.browsers \" > 5%, ie10\" -r ./public/styles/style.css",
-    "start": "npm run watchify | npm run serve",
-    "build": "npm run browserify && npm run uglify && npm run autoprefixer && babel-node server.js"
+    "autoprefixer": "postcss --no-map --use autoprefixer --autoprefixer.browsers \" > 5%, ie10\" -r ./public/styles/style.css",
+    "serve": "npm run watchify | npm run watch-server",
+    "start": "npm run browserify && npm run uglify && npm run autoprefixer && babel-node server.js"
   },
   "author": "",
   "license": "ISC",
