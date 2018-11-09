@@ -19,9 +19,11 @@ app
 
   .use(sassMiddleware({
     src: `${__dirname}/src/scss`,
-    dest: publicDir,
-    debug: false,
-    outputStyle: 'compressed'
+    dest: `${__dirname}/public/styles`,
+    prefix: '/styles',
+    debug: true,
+    outputStyle: 'compressed',
+    sourceMap: false
   }))
   .use(express.static(publicDir))
   .use(favicon(faviconDir))

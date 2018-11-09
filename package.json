@@ -4,13 +4,16 @@
   "description": "",
   "main": "package.json",
   "scripts": {
+    "heroku-prebuild": "export NPM_CONFIG_PRODUCTION=false; export NODE_ENV=; NPM_CONFIG_PRODUCTION=false NODE_ENV=development npm install --only=dev --dev",
+    "heroku-postbuild": "export NPM_CONFIG_PRODUCTION=true; export NODE_ENV=production;",
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "nodemon --watch src -e pug,scss,js,json --exec babel-node server.js",
     "watchify": "watchify src/js/index.js -o public/script.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] --plugins [ @babel/plugin-proposal-class-properties ] ] -v",
     "browserify": "browserify src/js/index.js -o public/script.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] --plugins [ @babel/plugin-proposal-class-properties ] ]",
+    "uglify": "uglifyjs ./public/script.js -c -o ./public/script.js",
+    "autoprefixer": "postcss --use autoprefixer --autoprefixer.browsers \" > 5%, ie10\" -r ./public/styles/style.css",
     "start": "npm run watchify | npm run serve",
-    "heroku-prebuild": "export NPM_CONFIG_PRODUCTION=false; export NODE_ENV=; NPM_CONFIG_PRODUCTION=false NODE_ENV=development npm install --only=dev --dev",
-    "heroku-postbuild": "export NPM_CONFIG_PRODUCTION=true; export NODE_ENV=production;"
+    "build": "npm run browserify && npm run uglify && npm run autoprefixer && babel-node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,12 +28,15 @@
     "@babel/preset-env": "^7.1.5",
     "@babel/preset-react": "^7.0.0",
     "ack-reload": "^2.0.12",
+    "autoprefixer": "^9.3.1",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
     "node-sass-middleware": "^0.11.0",
     "nodemon": "^1.18.6",
+    "postcss-cli": "^6.0.1",
     "pug": "^2.0.3",
     "serve-favicon": "^2.5.0",
+    "uglifyjs": "^2.4.11",
     "watchify": "^3.11.0"
   }
 }
