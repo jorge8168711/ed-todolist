@@ -4,7 +4,7 @@ import favicon from 'serve-favicon'
 import sassMiddleware from 'node-sass-middleware'
 import routes from './src/app/routes'
 
-const env = 'development'
+const env = 'production'
 const port = process.env.PORT || 3000
 const publicDir = `${__dirname}/public`
 const viewDir = `${__dirname}/src/views`
@@ -19,9 +19,11 @@ app
 
   .use(sassMiddleware({
     src: `${__dirname}/src/scss`,
-    dest: publicDir,
-    debug: false,
-    outputStyle: 'compressed'
+    dest: `${__dirname}/public/styles`,
+    prefix: '/styles',
+    debug: true,
+    outputStyle: 'compressed',
+    sourceMap: false
   }))
   .use(express.static(publicDir))
   .use(favicon(faviconDir))
