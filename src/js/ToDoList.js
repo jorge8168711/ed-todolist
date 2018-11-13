@@ -16,11 +16,13 @@ export default class ToDoList {
   }
 
   getTasks (key) {
+    c(j.parse(ls.getItem(key)))
     return j.parse(ls.getItem(key))
   }
 
   updateTasks (updatedTasks) {
     ls.setItem(this.key, j.stringify(updatedTasks))
+    c(updatedTasks)
   }
 
   addTask (e) {
@@ -70,10 +72,12 @@ export default class ToDoList {
 
   renderTask (task) {
     let taskTemplate = `
-    <li class="list-item ${task.isComplete ? 'completed' : ''}">
-      <input class="list-item__checkbox ${task.isComplete ? 'completed' : ''}"
+    <li class="list-item ${task.isComplete ? 'is-completed' : ''}">
+      <input class="list-item__checkbox ${task.isComplete ? 'is-completed' : ''}"
         type="checkbox"
-        id="${task.id}">
+        id="${task.id}"
+        ${task.isComplete ? 'checked' : ''}>
+
         <label class="list-item__label"
           data-id="${task.id}"
           contenteditable
@@ -90,8 +94,32 @@ export default class ToDoList {
 
   render () {
     let tasks = this.getTasks(this.key)
+    let listTasks = list.children
 
+    // render tasks list
     tasks.forEach(task => this.renderTask(task))
+
+    // https://developer.mozilla.org/es/docs/Web/API/HTMLCollection
+    // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/from
+    // las listas de nodos se comportan como arreglos pero no son arreglos
+    // por lo tanto los métodos de los arreglos no funcionan con estos
+    // creamos un array a partir de una lista de nodos(HTMLCollection)
+    Array.from(listTasks).forEach(listItem => {
+      listItem.querySelector('input[type="checkbox"]')
+        .addEventListener('change', e => {
+          let task = tasks.filter(task => task.id === Number(e.target.id))
+
+          if (e.target.checked) {
+            e.target.parentElement.classList.add('is-completed')
+            task[0].isComplete = true
+          } else {
+            e.target.parentElement.classList.remove('is-completed')
+            task[0].isComplete = false
+          }
+
+          this.updateTasks(tasks)
+        })
+    })
 
     task.addEventListener('keyup', this.addTask)
     list.addEventListener('click', this.editTask)
