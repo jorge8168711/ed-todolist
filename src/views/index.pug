@@ -5,7 +5,7 @@ block metatags
   meta(name="description", content=description)
 
 block content
-  main.App
-    h1= title
-    p= description
-    img(src="./img/logo.png")
+  main.todo
+    input#taskInput.task-input(type="text" placeholder="Tarea..." spellcheck)
+    ul#todoList.todo-list
+
