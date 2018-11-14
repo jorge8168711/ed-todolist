@@ -3,8 +3,8 @@
  */
 
 
-// COLOR SETTINGS
 :root {
+  // COLOR SETTINGS
   --brand-color-primary: #636B77;
   --brand-color-primary-light: #A8B4C1;
   --brand-color-primary-lightest: #D6E0E8;
@@ -12,4 +12,14 @@
 
   --brand-color-accent: #46D1FC;
   --brand-color-accent-light: #8DE7FF;
+
+  --brand-color-warn: #D25563;
+
+  // CONTENT SIZE
+  --content-max-width: 480px;
+
+
+  // ASIDE SETTINGS
+  --aside-base-font-size: 1rem;
+  --aside-width: 280px;
 }

@@ -74,13 +74,28 @@ function () {
       (0, _helpers.c)(updatedTasks);
     }
   }, {
+    key: "toggleErrorMessage",
+    value: function toggleErrorMessage(itShow) {
+      if (itShow) {
+        _index.errorMessage.innerText = 'no se puede agregar una tarea vacía';
+
+        _index.errorMessage.classList.add('is-visible');
+
+        _index.task.classList.add('has-error');
+      } else {
+        _index.errorMessage.classList.remove('is-visible');
+
+        _index.task.classList.remove('has-error');
+
+        _index.errorMessage.innerText = '';
+      }
+    }
+  }, {
     key: "addTask",
     value: function addTask(e) {
-      if (!e.target.value) {
-        (0, _helpers.c)('no puedes agregar una tarea vacia');
-      }
+      !e.target.value ? this.toggleErrorMessage(true) : this.toggleErrorMessage(false);
 
-      if (e.keyCode === _helpers.ENTER_KEY) {
+      if (e.keyCode === _helpers.ENTER_KEY && e.target.value) {
         var newTask = new _Task.default(e.target.value);
         var tasks = this.getTasks(this.key);
         tasks.push(newTask);
@@ -136,7 +151,7 @@ function () {
   }, {
     key: "renderTask",
     value: function renderTask(task) {
-      var taskTemplate = "\n    <li class=\"list-item ".concat(task.isComplete ? 'is-completed' : '', "\">\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'is-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n        <label class=\"list-item__label\"\n          data-id=\"").concat(task.id, "\"\n          contenteditable\n          spellcheck>\n          ").concat(task.name, "\n        </label>\n\n        <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\">&#128465;</a>\n    </li>\n    ");
+      var taskTemplate = "\n    <li class=\"list-item ".concat(task.isComplete ? 'is-completed' : '', "\">\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'is-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n        <label class=\"list-item__label\"\n          data-id=\"").concat(task.id, "\"\n          contenteditable\n          spellcheck>\n          ").concat(task.name, "\n        </label>\n\n        <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\">&#128465;\n        <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\"/><path d=\"M0 0h24v24H0z\" fill=\"none\"/></svg></a>\n    </li>\n    ");
 
       _index.list.insertAdjacentHTML('beforeend', taskTemplate);
     }
@@ -176,6 +191,10 @@ function () {
 
       _index.task.addEventListener('keyup', this.addTask);
 
+      _index.task.addEventListener('blur', function () {
+        _this2.toggleErrorMessage(false);
+      });
+
       _index.list.addEventListener('click', this.editTask);
 
       _index.list.addEventListener('click', this.removeTask);
@@ -211,7 +230,7 @@ exports.ls = ls;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.list = exports.task = void 0;
+exports.errorMessage = exports.list = exports.task = void 0;
 
 var _helpers = require("./helpers");
 
@@ -226,6 +245,10 @@ exports.task = task;
 var list = _helpers.d.querySelector('#todoList');
 
 exports.list = list;
+
+var errorMessage = _helpers.d.querySelector('#errorMessage');
+
+exports.errorMessage = errorMessage;
 var todo = new _ToDoList.default('NiceTodoList');
 todo.render();
 

@@ -1,5 +1,5 @@
 import { ENTER_KEY, c, d, j, ls } from './helpers'
-import { task, list } from './index.js'
+import { task, list, errorMessage } from './index.js'
 import Task from './Task'
 
 export default class ToDoList {
@@ -25,12 +25,24 @@ export default class ToDoList {
     c(updatedTasks)
   }
 
-  addTask (e) {
-    if (!e.target.value) {
-      c('no puedes agregar una tarea vacia')
+  toggleErrorMessage (itShow) {
+    if (itShow) {
+      errorMessage.innerText = 'no se puede agregar una tarea vacía'
+      errorMessage.classList.add('is-visible')
+      task.classList.add('has-error')
+    } else {
+      errorMessage.classList.remove('is-visible')
+      task.classList.remove('has-error')
+      errorMessage.innerText = ''
     }
+  }
 
-    if (e.keyCode === ENTER_KEY) {
+  addTask (e) {
+    !e.target.value
+      ? this.toggleErrorMessage(true)
+      : this.toggleErrorMessage(false)
+
+    if (e.keyCode === ENTER_KEY && e.target.value) {
       let newTask = new Task(e.target.value)
       let tasks = this.getTasks(this.key)
 
@@ -85,7 +97,8 @@ export default class ToDoList {
           ${task.name}
         </label>
 
-        <a class="list-item__remove-button" href="#" data-id="${task.id}">&#128465;</a>
+        <a class="list-item__remove-button" href="#" data-id="${task.id}">&#128465;
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/><path d="M0 0h24v24H0z" fill="none"/></svg></a>
     </li>
     `
 
@@ -122,6 +135,8 @@ export default class ToDoList {
     })
 
     task.addEventListener('keyup', this.addTask)
+    task.addEventListener('blur', () => { this.toggleErrorMessage(false) })
+
     list.addEventListener('click', this.editTask)
     list.addEventListener('click', this.removeTask)
   }
