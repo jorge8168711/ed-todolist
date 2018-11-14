@@ -84,26 +84,28 @@ export default class ToDoList {
 
   renderTask (task) {
     let taskTemplate = `
-    <li class="list-item ${task.isComplete ? 'is-completed' : ''}">
-      <input class="list-item__checkbox ${task.isComplete ? 'is-completed' : ''}"
+    <li class="list-item ${task.isComplete ? 'was-completed' : ''}">
+      <label for="${task.id}" class="list-item__checkmark"></label>
+      <input class="list-item__checkbox ${task.isComplete ? 'was-completed' : ''}"
         type="checkbox"
         id="${task.id}"
         ${task.isComplete ? 'checked' : ''}>
 
-        <label class="list-item__label"
-          data-id="${task.id}"
-          contenteditable
-          spellcheck>
-          ${task.name}
-        </label>
+      <label class="list-item__label"
+        data-id="${task.id}"
+        contenteditable
+        spellcheck>
+        ${task.name}
+      </label>
 
-        <a class="list-item__remove-button" href="#" data-id="${task.id}">&#128465;
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/><path d="M0 0h24v24H0z" fill="none"/></svg></a>
+      <p class="list-item__date">${task.creationDate}</p>
+      <a class="list-item__remove-button" href="#" data-id="${task.id}"></a>
     </li>
     `
 
     list.insertAdjacentHTML('beforeend', taskTemplate)
   }
+
 
   render () {
     let tasks = this.getTasks(this.key)
@@ -123,10 +125,10 @@ export default class ToDoList {
           let task = tasks.filter(task => task.id === Number(e.target.id))
 
           if (e.target.checked) {
-            e.target.parentElement.classList.add('is-completed')
+            e.target.parentElement.classList.add('was-completed')
             task[0].isComplete = true
           } else {
-            e.target.parentElement.classList.remove('is-completed')
+            e.target.parentElement.classList.remove('was-completed')
             task[0].isComplete = false
           }
 

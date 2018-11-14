@@ -1,0 +1,105 @@
+/**
+ * TASKS LISTA
+ */
+
+.todo-list-title {
+  color: var(--brand-color-accent);
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 2em 0 1em;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  max-width: var(--content-max-width);
+  margin: 0;
+  padding: 0;
+}
+
+.list-item {
+  border-bottom: 1px solid var(--brand-color-primary-lightest);
+  font-size: 1rem;
+  position: relative;
+  padding-bottom: .5em;
+  padding-right: 30px;
+  &:not(:first-child) {
+    margin-top: 1em;
+  }
+
+  &__checkmark,
+  &__remove-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__checkmark {
+    background-color: var(--brand-color-primary-lightest);
+    cursor: pointer;
+    height: 1.25em;
+    width: 1.25em;
+    left: -1.25em;
+    margin-left: -.8em;
+    border-radius: 50%;
+    transition: background .1s linear;
+  }
+
+  &__checkbox {
+    display: none;
+  }
+
+  &__label {
+    background-color: #fff;
+    color: var(--brand-color-primary);
+    cursor: pointer;
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+    padding: .25em;
+    transition: all .12s cubic-bezier(0.4, 0.0, 0.2, 1);
+    will-change: background-color, transform;
+  }
+
+  &__label:focus {
+    box-shadow: 0 0 8px 0 rgba(99, 107, 119, .2);
+    cursor: text;
+    outline: none;
+  }
+
+  &__date {
+    color: var(--brand-color-primary-light);
+    font-size: .8em;
+    font-weight: 300;
+    margin: 0;
+    padding-left: .25em;
+  }
+
+  &__remove-button {
+    background: transparent url(../img/baseline-delete-24px.svg) center/20px no-repeat;
+    display: block;
+    height: 24px;
+    width: 24px;
+    right: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-10px, -50%);
+    transition: all .12s cubic-bezier(0.4, 0.0, 0.2, 1);
+    will-change: visibility, opacity, transform;
+  }
+
+  // HOVER STATE
+  &:hover .list-item__remove-button {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, -50%);
+  }
+
+  // COMPLETED STATE
+  &.was-completed {
+    .list-item__checkmark {
+      background: var(--brand-color-accent) url(../img/baseline-check-24px.svg) center / 14px no-repeat;
+    }
+  }
+}

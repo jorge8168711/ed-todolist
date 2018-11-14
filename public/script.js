@@ -11,9 +11,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Task = function Task(name) {
   _classCallCheck(this, Task);
 
-  this.id = new Date().getTime();
+  this.date = new Date();
+  this.id = this.date.getTime();
   this.name = name;
-  this.isComplete = false; // se retorna el objecto generado por el el metodo constructror
+  this.isComplete = false;
+  this.creationDate = "".concat(this.date.getDay(), "/").concat(this.date.getMonth(), "/").concat(this.date.getUTCFullYear()); // se retorna el objecto generado por el el metodo constructror
   // con esto permitimos que se pueda guardar este objeto en localStorage
 
   return this;
@@ -151,7 +153,7 @@ function () {
   }, {
     key: "renderTask",
     value: function renderTask(task) {
-      var taskTemplate = "\n    <li class=\"list-item ".concat(task.isComplete ? 'is-completed' : '', "\">\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'is-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n        <label class=\"list-item__label\"\n          data-id=\"").concat(task.id, "\"\n          contenteditable\n          spellcheck>\n          ").concat(task.name, "\n        </label>\n\n        <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\">&#128465;\n        <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z\"/><path d=\"M0 0h24v24H0z\" fill=\"none\"/></svg></a>\n    </li>\n    ");
+      var taskTemplate = "\n    <li class=\"list-item ".concat(task.isComplete ? 'was-completed' : '', "\">\n      <label for=\"").concat(task.id, "\" class=\"list-item__checkmark\"></label>\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'was-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n      <label class=\"list-item__label\"\n        data-id=\"").concat(task.id, "\"\n        contenteditable\n        spellcheck>\n        ").concat(task.name, "\n      </label>\n\n      <p class=\"list-item__date\">").concat(task.creationDate, "</p>\n      <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\"></a>\n    </li>\n    ");
 
       _index.list.insertAdjacentHTML('beforeend', taskTemplate);
     }
@@ -178,10 +180,10 @@ function () {
           });
 
           if (e.target.checked) {
-            e.target.parentElement.classList.add('is-completed');
+            e.target.parentElement.classList.add('was-completed');
             task[0].isComplete = true;
           } else {
-            e.target.parentElement.classList.remove('is-completed');
+            e.target.parentElement.classList.remove('was-completed');
             task[0].isComplete = false;
           }
 
