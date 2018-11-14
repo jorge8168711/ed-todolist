@@ -82,9 +82,10 @@ export default class ToDoList {
     }
   }
 
-  renderTask (task) {
+  renderTask (task, index) {
     let taskTemplate = `
-    <li class="list-item ${task.isComplete ? 'was-completed' : ''}">
+    <li class="list-item entry-animation ${task.isComplete ? 'was-completed' : ''}"
+      style="animation-delay: ${(index + 1) * 120}ms">
       <label for="${task.id}" class="list-item__checkmark"></label>
       <input class="list-item__checkbox ${task.isComplete ? 'was-completed' : ''}"
         type="checkbox"
@@ -112,7 +113,7 @@ export default class ToDoList {
     let listTasks = list.children
 
     // render tasks list
-    tasks.forEach(task => this.renderTask(task))
+    tasks.forEach((task, index) => this.renderTask(task, index))
 
     // https://developer.mozilla.org/es/docs/Web/API/HTMLCollection
     // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/from

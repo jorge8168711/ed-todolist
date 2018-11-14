@@ -6,7 +6,7 @@
   color: var(--brand-color-accent);
   font-size: 1.5rem;
   font-weight: 900;
-  margin: 2em 0 1em;
+  margin: 2em 0 .5em;
 }
 
 .todo-list {
@@ -24,6 +24,14 @@
   position: relative;
   padding-bottom: .5em;
   padding-right: 30px;
+  transform: translateX(-10%);
+  opacity: 0;
+  visibility: hidden;
+
+  &.entry-animation {
+    animation: itemEntry .23s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+  }
+
   &:not(:first-child) {
     margin-top: 1em;
   }
@@ -37,6 +45,7 @@
 
   &__checkmark {
     background-color: var(--brand-color-primary-lightest);
+    background-position: center;
     cursor: pointer;
     height: 1.25em;
     width: 1.25em;
@@ -101,5 +110,33 @@
     .list-item__checkmark {
       background: var(--brand-color-accent) url(../img/baseline-check-24px.svg) center / 14px no-repeat;
     }
+  }
+}
+
+
+@keyframes itemEntry {
+  from {
+    transform: translateX(-10%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@keyframes itemEntry {
+  from {
+    transform: translateX(-10%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
   }
 }

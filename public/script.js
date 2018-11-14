@@ -152,8 +152,8 @@ function () {
     }
   }, {
     key: "renderTask",
-    value: function renderTask(task) {
-      var taskTemplate = "\n    <li class=\"list-item ".concat(task.isComplete ? 'was-completed' : '', "\">\n      <label for=\"").concat(task.id, "\" class=\"list-item__checkmark\"></label>\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'was-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n      <label class=\"list-item__label\"\n        data-id=\"").concat(task.id, "\"\n        contenteditable\n        spellcheck>\n        ").concat(task.name, "\n      </label>\n\n      <p class=\"list-item__date\">").concat(task.creationDate, "</p>\n      <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\"></a>\n    </li>\n    ");
+    value: function renderTask(task, index) {
+      var taskTemplate = "\n    <li class=\"list-item entry-animation ".concat(task.isComplete ? 'was-completed' : '', "\"\n      style=\"animation-delay: ").concat((index + 1) * 120, "ms\">\n      <label for=\"").concat(task.id, "\" class=\"list-item__checkmark\"></label>\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'was-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n      <label class=\"list-item__label\"\n        data-id=\"").concat(task.id, "\"\n        contenteditable\n        spellcheck>\n        ").concat(task.name, "\n      </label>\n\n      <p class=\"list-item__date\">").concat(task.creationDate, "</p>\n      <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\"></a>\n    </li>\n    ");
 
       _index.list.insertAdjacentHTML('beforeend', taskTemplate);
     }
@@ -165,8 +165,8 @@ function () {
       var tasks = this.getTasks(this.key);
       var listTasks = _index.list.children; // render tasks list
 
-      tasks.forEach(function (task) {
-        return _this2.renderTask(task);
+      tasks.forEach(function (task, index) {
+        return _this2.renderTask(task, index);
       }); // https://developer.mozilla.org/es/docs/Web/API/HTMLCollection
       // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/from
       // las listas de nodos se comportan como arreglos pero no son arreglos
@@ -232,7 +232,7 @@ exports.ls = ls;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.errorMessage = exports.list = exports.task = void 0;
+exports.content = exports.errorMessage = exports.list = exports.task = void 0;
 
 var _helpers = require("./helpers");
 
@@ -251,7 +251,13 @@ exports.list = list;
 var errorMessage = _helpers.d.querySelector('#errorMessage');
 
 exports.errorMessage = errorMessage;
+
+var content = _helpers.d.querySelector('#content');
+
+exports.content = content;
 var todo = new _ToDoList.default('NiceTodoList');
-todo.render();
+window.addEventListener('DOMContentLoaded', function (e) {
+  todo.render();
+});
 
 },{"./ToDoList":2,"./helpers":3}]},{},[4]);
