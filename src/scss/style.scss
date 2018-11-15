@@ -1,9 +1,7 @@
-body {
-  background-color: lightyellow;
-  font-family: sans-serif;
-}
-
-.body {
-  transform: scale(1);
-  display: flex;
-}
+@import "normalize";
+@import "settings";
+@import "generic";
+@import "wrapper";
+@import "aside-nav";
+@import "task-input";
+@import "tasks-list";
