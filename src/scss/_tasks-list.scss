@@ -24,12 +24,19 @@
   position: relative;
   padding-bottom: .5em;
   padding-right: 30px;
-  transform: translateX(-10%);
-  opacity: 0;
-  visibility: hidden;
 
   &.entry-animation {
-    animation: itemEntry .23s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-30px);
+    animation: entryAnimation .24s cubic-bezier(0.0, 0.0, 0.2, 1) forwards;
+  }
+
+  &.exit-animation {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    animation: exitAnimation .18s cubic-bezier(0.4, 0.0, 1, 1) forwards;
   }
 
   &:not(:first-child) {
@@ -52,7 +59,7 @@
     left: -1.25em;
     margin-left: -.8em;
     border-radius: 50%;
-    transition: background .1s linear;
+    transition: background .12s cubic-bezier(0.4, 0.0, 0.2, 1);
   }
 
   &__checkbox {
@@ -110,11 +117,16 @@
     .list-item__checkmark {
       background: var(--brand-color-accent) url(../img/baseline-check-24px.svg) center / 14px no-repeat;
     }
+
+    .list-item__label {
+      opacity: .65;
+      text-decoration: line-through;
+    }
   }
 }
 
 
-@keyframes itemEntry {
+@keyframes entryAnimation {
   from {
     transform: translateX(-10%);
     opacity: 0;
@@ -127,16 +139,23 @@
     visibility: visible;
   }
 }
-@keyframes itemEntry {
-  from {
-    transform: translateX(-10%);
-    opacity: 0;
-    visibility: hidden;
-  }
 
-  to {
+@keyframes exitAnimation {
+  0% {
     transform: translateX(0);
     opacity: 1;
     visibility: visible;
+  }
+
+  // 60% {
+  //   transform: translateX(-30px);
+  //   opacity: .65;
+  //   visibility: visible;
+  // }
+
+  100% {
+    transform: translateX(70%);
+    opacity: 0;
+    visibility: hidden;
   }
 }

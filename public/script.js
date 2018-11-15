@@ -52,6 +52,7 @@ function () {
     _classCallCheck(this, ToDoList);
 
     this.key = key;
+    this.tasksList = _index.list.children;
 
     if (!_helpers.ls.getItem(key)) {
       _helpers.ls.setItem(key, _helpers.j.stringify([]));
@@ -104,6 +105,7 @@ function () {
         this.updateTasks(tasks);
         this.renderTask(newTask);
         e.target.value = '';
+        this.addListenerForTasksInput(tasks);
       }
     }
   }, {
@@ -111,7 +113,7 @@ function () {
     value: function editTask(e) {
       var _this = this;
 
-      if (e.target.localName === 'label') {
+      if (e.target.localName === 'label' && e.target.className === "list-item__label") {
         var tasks = this.getTasks(this.key);
         var taskToEdit = tasks.findIndex(function (task) {
           return task.id === Number(e.target.dataset.id);
@@ -147,35 +149,33 @@ function () {
         });
         tasks.splice(taskToRemove, 1);
         this.updateTasks(tasks);
-        e.target.parentElement.remove();
+        e.target.parentElement.addEventListener('animationend', function (e) {
+          e.target.remove();
+        });
+        e.target.parentElement.removeAttribute('style');
+        e.target.parentElement.classList.replace('entry-animation', 'exit-animation');
       }
     }
   }, {
     key: "renderTask",
     value: function renderTask(task, index) {
-      var taskTemplate = "\n    <li class=\"list-item entry-animation ".concat(task.isComplete ? 'was-completed' : '', "\"\n      style=\"animation-delay: ").concat((index + 1) * 120, "ms\">\n      <label for=\"").concat(task.id, "\" class=\"list-item__checkmark\"></label>\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'was-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n      <label class=\"list-item__label\"\n        data-id=\"").concat(task.id, "\"\n        contenteditable\n        spellcheck>\n        ").concat(task.name, "\n      </label>\n\n      <p class=\"list-item__date\">").concat(task.creationDate, "</p>\n      <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\"></a>\n    </li>\n    ");
+      var taskTemplate = "\n    <li class=\"list-item entry-animation ".concat(task.isComplete ? 'was-completed' : '', "\"\n      style=\"animation-delay: ").concat(index + 1 ? (index + 1) * 120 : '0', "ms\">\n      <label for=\"").concat(task.id, "\" class=\"list-item__checkmark\"></label>\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'was-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n      <label class=\"list-item__label\"\n        data-id=\"").concat(task.id, "\"\n        contenteditable\n        spellcheck>\n        ").concat(task.name, "\n      </label>\n\n      <p class=\"list-item__date\">").concat(task.creationDate, "</p>\n      <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\"></a>\n    </li>\n    ");
 
       _index.list.insertAdjacentHTML('beforeend', taskTemplate);
     }
   }, {
-    key: "render",
-    value: function render() {
+    key: "addListenerForTasksInput",
+    value: function addListenerForTasksInput(tasksArray) {
       var _this2 = this;
 
-      var tasks = this.getTasks(this.key);
-      var listTasks = _index.list.children; // render tasks list
-
-      tasks.forEach(function (task, index) {
-        return _this2.renderTask(task, index);
-      }); // https://developer.mozilla.org/es/docs/Web/API/HTMLCollection
+      // https://developer.mozilla.org/es/docs/Web/API/HTMLCollection
       // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/from
       // las listas de nodos se comportan como arreglos pero no son arreglos
       // por lo tanto los métodos de los arreglos no funcionan con estos
       // creamos un array a partir de una lista de nodos(HTMLCollection)
-
-      Array.from(listTasks).forEach(function (listItem) {
+      Array.from(this.tasksList).forEach(function (listItem) {
         listItem.querySelector('input[type="checkbox"]').addEventListener('change', function (e) {
-          var task = tasks.filter(function (task) {
+          var task = tasksArray.filter(function (task) {
             return task.id === Number(e.target.id);
           });
 
@@ -187,15 +187,29 @@ function () {
             task[0].isComplete = false;
           }
 
-          _this2.updateTasks(tasks);
+          _this2.updateTasks(tasksArray);
         });
       });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var tasks = this.getTasks(this.key); // render tasks on local storage when the page load
+
+      tasks.forEach(function (task, index) {
+        return _this3.renderTask(task, index);
+      }); // listeners for inputs on each task item
+
+      this.addListenerForTasksInput(tasks); // task input listeners
 
       _index.task.addEventListener('keyup', this.addTask);
 
       _index.task.addEventListener('blur', function () {
-        _this2.toggleErrorMessage(false);
-      });
+        _this3.toggleErrorMessage(false);
+      }); // list items listeners
+
 
       _index.list.addEventListener('click', this.editTask);
 

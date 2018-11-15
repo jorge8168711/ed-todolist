@@ -2,9 +2,11 @@ import { ENTER_KEY, c, d, j, ls } from './helpers'
 import { task, list, errorMessage } from './index.js'
 import Task from './Task'
 
+
 export default class ToDoList {
   constructor (key) {
     this.key = key
+    this.tasksList = list.children
 
     if (!ls.getItem(key)) {
       ls.setItem(key, j.stringify([]))
@@ -50,11 +52,13 @@ export default class ToDoList {
       this.updateTasks(tasks)
       this.renderTask(newTask)
       e.target.value = ''
+
+      this.addListenerForTasksInput(tasks)
     }
   }
 
   editTask (e) {
-    if (e.target.localName === 'label') {
+    if (e.target.localName === 'label' && e.target.className === "list-item__label") {
       let tasks = this.getTasks(this.key)
       let taskToEdit = tasks.findIndex(task => task.id === Number(e.target.dataset.id))
       let label = d.querySelector(`[data-id="${tasks[taskToEdit].id}"]`)
@@ -74,18 +78,25 @@ export default class ToDoList {
   removeTask (e) {
     if (e.target.localName === 'a') {
       e.preventDefault()
+
       let tasks = this.getTasks(this.key)
       let taskToRemove = tasks.findIndex(task => task.id === Number(e.target.dataset.id))
+
       tasks.splice(taskToRemove, 1)
       this.updateTasks(tasks)
-      e.target.parentElement.remove()
+
+      e.target.parentElement.addEventListener('animationend', e => {
+        e.target.remove()
+      })
+      e.target.parentElement.removeAttribute('style')
+      e.target.parentElement.classList.replace('entry-animation', 'exit-animation')
     }
   }
 
   renderTask (task, index) {
     let taskTemplate = `
     <li class="list-item entry-animation ${task.isComplete ? 'was-completed' : ''}"
-      style="animation-delay: ${(index + 1) * 120}ms">
+      style="animation-delay: ${(index + 1) ? (index + 1 ) * 120 : '0'}ms">
       <label for="${task.id}" class="list-item__checkmark"></label>
       <input class="list-item__checkbox ${task.isComplete ? 'was-completed' : ''}"
         type="checkbox"
@@ -107,39 +118,43 @@ export default class ToDoList {
     list.insertAdjacentHTML('beforeend', taskTemplate)
   }
 
-
-  render () {
-    let tasks = this.getTasks(this.key)
-    let listTasks = list.children
-
-    // render tasks list
-    tasks.forEach((task, index) => this.renderTask(task, index))
-
+   addListenerForTasksInput (tasksArray) {
     // https://developer.mozilla.org/es/docs/Web/API/HTMLCollection
     // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/from
     // las listas de nodos se comportan como arreglos pero no son arreglos
     // por lo tanto los métodos de los arreglos no funcionan con estos
     // creamos un array a partir de una lista de nodos(HTMLCollection)
-    Array.from(listTasks).forEach(listItem => {
-      listItem.querySelector('input[type="checkbox"]')
-        .addEventListener('change', e => {
-          let task = tasks.filter(task => task.id === Number(e.target.id))
+    Array.from(this.tasksList).forEach(listItem => {
+      listItem.querySelector('input[type="checkbox"]').addEventListener('change', e => {
+        let task = tasksArray.filter(task => task.id === Number(e.target.id))
 
-          if (e.target.checked) {
-            e.target.parentElement.classList.add('was-completed')
-            task[0].isComplete = true
-          } else {
-            e.target.parentElement.classList.remove('was-completed')
-            task[0].isComplete = false
-          }
+        if (e.target.checked) {
+          e.target.parentElement.classList.add('was-completed')
+          task[0].isComplete = true
+        } else {
+          e.target.parentElement.classList.remove('was-completed')
+          task[0].isComplete = false
+        }
 
-          this.updateTasks(tasks)
-        })
+        this.updateTasks(tasksArray)
+      })
     })
+  }
 
+  render () {
+    let tasks = this.getTasks(this.key)
+
+    // render tasks on local storage when the page load
+    tasks.forEach((task, index) => this.renderTask(task, index))
+
+    // listeners for inputs on each task item
+    this.addListenerForTasksInput(tasks)
+
+    // task input listeners
     task.addEventListener('keyup', this.addTask)
     task.addEventListener('blur', () => { this.toggleErrorMessage(false) })
 
+    // list items listeners
     list.addEventListener('click', this.editTask)
     list.addEventListener('click', this.removeTask)
   }
