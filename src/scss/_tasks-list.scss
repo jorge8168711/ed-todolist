@@ -50,7 +50,7 @@
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
-    animation: exitAnimation .18s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+    animation: exitAnimation .15s cubic-bezier(0.4, 0.0, 1, 1) forwards;
   }
 
   &:not(:first-child) {

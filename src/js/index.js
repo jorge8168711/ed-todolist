@@ -1,12 +1,20 @@
 import { d } from './helpers'
 import ToDoList from './ToDoList'
+import Tasks from './Tasks'
 
-export const task = d.querySelector('#taskInput')
-export const list = d.querySelector('#todoList')
+// DOM ELEMENTS
+export const taskInput = d.querySelector('#taskInput')
+export const tasksList = d.querySelector('#todoList')
+
 export const errorMessage = d.querySelector('#errorMessage')
-export const content = d.querySelector('#content')
-const todo = new ToDoList('NiceTodoList')
 
-window.addEventListener('DOMContentLoaded', (e) => {
-  todo.render()
-})
+export const tasks = new Tasks('NiceTodoList')
+export const todoList = new ToDoList()
+
+// task input listeners
+taskInput.addEventListener('keyup', e => { todoList.addNewTask(e) })
+taskInput.addEventListener('blur', () => { todoList.toggleErrorMessage(false) })
+
+// task-list listeners
+tasksList.addEventListener('click', e => { todoList.editTask(e) })
+tasksList.addEventListener('click', e => { todoList.removeTask(e) })
