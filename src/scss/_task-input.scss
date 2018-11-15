@@ -2,11 +2,6 @@
  * TODO-LIST STYLES
  */
 
-.todo {
-  padding: 96px;
-  width: calc(100% - var(--aside-width));
-}
-
 .task-input {
   -webkit-appearance: none;
   border: 1px solid var(--brand-color-primary-lightest);
@@ -20,6 +15,10 @@
   max-width: var(--content-max-width);
   transition: border-color .12s cubic-bezier(0.4, 0.0, 0.2, 1), color .12s cubic-bezier(0.4, 0.0, 0.2, 1);
   will-change: border-color, color;
+
+  @media screen and (max-width: 720px) {
+    max-width: 100%;
+  }
 
   &,
   &::placeholder {
@@ -43,13 +42,9 @@
   }
 }
 
-
 .error-message {
   color: var(--brand-color-warn);
   font-size: 11px;
-}
-
-.error-message {
   opacity: 0;
   transform: translatey(-10px);
   visibility: hidden;

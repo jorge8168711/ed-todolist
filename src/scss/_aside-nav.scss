@@ -10,14 +10,19 @@
   background-color: var(--light-gray-color);
   border-right: 1px solid var(--brand-color-primary-lightest);
   box-shadow: 1px 0 6px 1px rgba(0,0,0,0.08);
-  padding: 1.5em;
+  padding: 150px 1.5em 1.5em;
   width: 280px;
+
+  @media screen and (max-width: 720px) {
+    padding: 1.5em;
+    width: 100%;
+  }
 
   &__title {
     color: var(--brand-color-primary);
     font-size: 2em;
     font-weight: 900;
-    margin: 150px 0 0;
+    margin: 0;
     padding-bottom: .31em;
     position: relative;
 
@@ -70,7 +75,7 @@ a[class$="__link"] {
   align-items: center;
   justify-content: flex-end;
   margin: auto 0 0;
-  padding: 0 0 ;
+  padding: 1em 0 0;
   list-style: none;
 
   &__item {
