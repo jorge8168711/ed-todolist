@@ -1,0 +1,64 @@
+/**
+ * TODO-LIST STYLES
+ */
+
+.todo {
+  padding: 96px;
+  width: calc(100% - var(--aside-width));
+}
+
+.task-input {
+  -webkit-appearance: none;
+  border: 1px solid var(--brand-color-primary-lightest);
+  border-radius: 2px;
+  box-shadow: 0 0 8px 0 rgba(99, 107, 119, .2);
+  font-size: 1rem;
+  font-weight: 300;
+  padding: 10px 16px;
+  height: 40px;
+  width: 100%;
+  max-width: var(--content-max-width);
+  transition: border-color .12s cubic-bezier(0.4, 0.0, 0.2, 1), color .12s cubic-bezier(0.4, 0.0, 0.2, 1);
+  will-change: border-color, color;
+
+  &,
+  &::placeholder {
+    color: var(--brand-color-primary-light);
+  }
+
+  &:focus {
+    color: var(--brand-color-primary);
+    outline: 0;
+    border-color: var(--brand-color-accent);
+  }
+
+  // HAS ERROR STATE
+  &.has-error {
+    border-color: var(--brand-color-warn);
+  }
+
+  &.has-error,
+  &.has-error::placeholder {
+    color: var(--brand-color-warn);
+  }
+}
+
+
+.error-message {
+  color: var(--brand-color-warn);
+  font-size: 11px;
+}
+
+.error-message {
+  opacity: 0;
+  transform: translatey(-10px);
+  visibility: hidden;
+  transition: all .19s cubic-bezier(0.4, 0.0, 0.2, 1);
+  will-change: transform, visibility, opacity;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+    visibility: visible;
+  }
+}

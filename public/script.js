@@ -11,9 +11,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Task = function Task(name) {
   _classCallCheck(this, Task);
 
-  this.id = new Date().getTime();
+  this.date = new Date();
+  this.id = this.date.getTime();
   this.name = name;
-  this.isComplete = false; // se retorna el objecto generado por el el metodo constructror
+  this.isComplete = false;
+  this.creationDate = "".concat(this.date.getDay(), "/").concat(this.date.getMonth(), "/").concat(this.date.getUTCFullYear()); // se retorna el objecto generado por el el metodo constructror
   // con esto permitimos que se pueda guardar este objeto en localStorage
 
   return this;
@@ -50,6 +52,7 @@ function () {
     _classCallCheck(this, ToDoList);
 
     this.key = key;
+    this.tasksList = _index.list.children;
 
     if (!_helpers.ls.getItem(key)) {
       _helpers.ls.setItem(key, _helpers.j.stringify([]));
@@ -74,19 +77,35 @@ function () {
       (0, _helpers.c)(updatedTasks);
     }
   }, {
+    key: "toggleErrorMessage",
+    value: function toggleErrorMessage(itShow) {
+      if (itShow) {
+        _index.errorMessage.innerText = 'no se puede agregar una tarea vacía';
+
+        _index.errorMessage.classList.add('is-visible');
+
+        _index.task.classList.add('has-error');
+      } else {
+        _index.errorMessage.classList.remove('is-visible');
+
+        _index.task.classList.remove('has-error');
+
+        _index.errorMessage.innerText = '';
+      }
+    }
+  }, {
     key: "addTask",
     value: function addTask(e) {
-      if (!e.target.value) {
-        (0, _helpers.c)('no puedes agregar una tarea vacia');
-      }
+      !e.target.value ? this.toggleErrorMessage(true) : this.toggleErrorMessage(false);
 
-      if (e.keyCode === _helpers.ENTER_KEY) {
+      if (e.keyCode === _helpers.ENTER_KEY && e.target.value) {
         var newTask = new _Task.default(e.target.value);
         var tasks = this.getTasks(this.key);
         tasks.push(newTask);
         this.updateTasks(tasks);
         this.renderTask(newTask);
         e.target.value = '';
+        this.addListenerForTasksInput(tasks);
       }
     }
   }, {
@@ -94,7 +113,7 @@ function () {
     value: function editTask(e) {
       var _this = this;
 
-      if (e.target.localName === 'label') {
+      if (e.target.localName === 'label' && e.target.className === "list-item__label") {
         var tasks = this.getTasks(this.key);
         var taskToEdit = tasks.findIndex(function (task) {
           return task.id === Number(e.target.dataset.id);
@@ -130,51 +149,67 @@ function () {
         });
         tasks.splice(taskToRemove, 1);
         this.updateTasks(tasks);
-        e.target.parentElement.remove();
+        e.target.parentElement.addEventListener('animationend', function (e) {
+          e.target.remove();
+        });
+        e.target.parentElement.removeAttribute('style');
+        e.target.parentElement.classList.replace('entry-animation', 'exit-animation');
       }
     }
   }, {
     key: "renderTask",
-    value: function renderTask(task) {
-      var taskTemplate = "\n    <li class=\"list-item ".concat(task.isComplete ? 'is-completed' : '', "\">\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'is-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n        <label class=\"list-item__label\"\n          data-id=\"").concat(task.id, "\"\n          contenteditable\n          spellcheck>\n          ").concat(task.name, "\n        </label>\n\n        <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\">&#128465;</a>\n    </li>\n    ");
+    value: function renderTask(task, index) {
+      var taskTemplate = "\n    <li class=\"list-item entry-animation ".concat(task.isComplete ? 'was-completed' : '', "\"\n      style=\"animation-delay: ").concat(index + 1 ? (index + 1) * 120 : '0', "ms\">\n      <label for=\"").concat(task.id, "\" class=\"list-item__checkmark\"></label>\n      <input class=\"list-item__checkbox ").concat(task.isComplete ? 'was-completed' : '', "\"\n        type=\"checkbox\"\n        id=\"").concat(task.id, "\"\n        ").concat(task.isComplete ? 'checked' : '', ">\n\n      <label class=\"list-item__label\"\n        data-id=\"").concat(task.id, "\"\n        contenteditable\n        spellcheck>\n        ").concat(task.name, "\n      </label>\n\n      <p class=\"list-item__date\">").concat(task.creationDate, "</p>\n      <a class=\"list-item__remove-button\" href=\"#\" data-id=\"").concat(task.id, "\"></a>\n    </li>\n    ");
 
       _index.list.insertAdjacentHTML('beforeend', taskTemplate);
     }
   }, {
-    key: "render",
-    value: function render() {
+    key: "addListenerForTasksInput",
+    value: function addListenerForTasksInput(tasksArray) {
       var _this2 = this;
 
-      var tasks = this.getTasks(this.key);
-      var listTasks = _index.list.children; // render tasks list
-
-      tasks.forEach(function (task) {
-        return _this2.renderTask(task);
-      }); // https://developer.mozilla.org/es/docs/Web/API/HTMLCollection
+      // https://developer.mozilla.org/es/docs/Web/API/HTMLCollection
       // https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/from
       // las listas de nodos se comportan como arreglos pero no son arreglos
       // por lo tanto los métodos de los arreglos no funcionan con estos
       // creamos un array a partir de una lista de nodos(HTMLCollection)
-
-      Array.from(listTasks).forEach(function (listItem) {
+      Array.from(this.tasksList).forEach(function (listItem) {
         listItem.querySelector('input[type="checkbox"]').addEventListener('change', function (e) {
-          var task = tasks.filter(function (task) {
+          var task = tasksArray.filter(function (task) {
             return task.id === Number(e.target.id);
           });
 
           if (e.target.checked) {
-            e.target.parentElement.classList.add('is-completed');
+            e.target.parentElement.classList.add('was-completed');
             task[0].isComplete = true;
           } else {
-            e.target.parentElement.classList.remove('is-completed');
+            e.target.parentElement.classList.remove('was-completed');
             task[0].isComplete = false;
           }
 
-          _this2.updateTasks(tasks);
+          _this2.updateTasks(tasksArray);
         });
       });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var tasks = this.getTasks(this.key); // render tasks on local storage when the page load
+
+      tasks.forEach(function (task, index) {
+        return _this3.renderTask(task, index);
+      }); // listeners for inputs on each task item
+
+      this.addListenerForTasksInput(tasks); // task input listeners
 
       _index.task.addEventListener('keyup', this.addTask);
+
+      _index.task.addEventListener('blur', function () {
+        _this3.toggleErrorMessage(false);
+      }); // list items listeners
+
 
       _index.list.addEventListener('click', this.editTask);
 
@@ -211,7 +246,7 @@ exports.ls = ls;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.list = exports.task = void 0;
+exports.content = exports.errorMessage = exports.list = exports.task = void 0;
 
 var _helpers = require("./helpers");
 
@@ -226,7 +261,17 @@ exports.task = task;
 var list = _helpers.d.querySelector('#todoList');
 
 exports.list = list;
+
+var errorMessage = _helpers.d.querySelector('#errorMessage');
+
+exports.errorMessage = errorMessage;
+
+var content = _helpers.d.querySelector('#content');
+
+exports.content = content;
 var todo = new _ToDoList.default('NiceTodoList');
-todo.render();
+window.addEventListener('DOMContentLoaded', function (e) {
+  todo.render();
+});
 
 },{"./ToDoList":2,"./helpers":3}]},{},[4]);
