@@ -64,7 +64,6 @@ function () {
   }, {
     key: "add",
     value: function add(task) {
-      (0, _helpers.c)(this.tasksArray);
       this.tasksArray.push(task);
       this.updateLocalStorage();
       this.notify();
@@ -264,12 +263,20 @@ function () {
   }, {
     key: "renderNoTasksMessage",
     value: function renderNoTasksMessage(tasks) {
-      var template = "\n      <div class=\"no-tasks-message\">your list is empty</div>\n    ";
+      var template = "\n      <div class=\"no-tasks-message fade-in\">\n        your list is empty\n\n        <p class=\"credits\">\n          <a class=\"credits__link\"\n            href=\"https://www.uplabs.com/posts/empty-state-for-to-do-list-app\"\n            target=\"_blank\">image\n          </a>\n\n          by\n\n          <a class=\"credits__link\" href=\"https://www.uplabs.com/prdvicky\"\n            target=\"_blank\">\n            Vicky Ardi\n          </a>\n        </p>\n      </div>\n    ";
 
       if (tasks.length === 0) {
-        _index.tasksList.insertAdjacentHTML('beforeend', template);
+        _helpers.d.querySelector('.todo-list-title').classList.toggle('hidden');
+
+        _helpers.d.querySelector('main.todo').insertAdjacentHTML('beforeend', template);
       } else if (_helpers.d.querySelector('.no-tasks-message') && tasks.length > 0) {
-        _helpers.d.querySelector('.no-tasks-message').remove();
+        _helpers.d.querySelector('.no-tasks-message').classList.replace('fade-in', 'fade-out');
+
+        _helpers.d.querySelector('.no-tasks-message').addEventListener('animationend', function () {
+          _helpers.d.querySelector('.no-tasks-message').remove();
+
+          _helpers.d.querySelector('.todo-list-title').classList.toggle('hidden');
+        });
       }
     }
   }, {

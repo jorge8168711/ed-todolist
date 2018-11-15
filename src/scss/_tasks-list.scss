@@ -17,6 +17,11 @@
   font-size: 1.5rem;
   font-weight: 900;
   margin: 2em 0 .5em;
+  transition: all .12s cubic-bezier(0.0, 0.0, 0.2, 1);
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 .todo-list {

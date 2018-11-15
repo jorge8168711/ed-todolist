@@ -119,13 +119,34 @@ export default class ToDoList {
 
   renderNoTasksMessage (tasks) {
     let template = `
-      <div class="no-tasks-message">your list is empty</div>
+      <div class="no-tasks-message fade-in">
+        your list is empty
+
+        <p class="credits">
+          <a class="credits__link"
+            href="https://www.uplabs.com/posts/empty-state-for-to-do-list-app"
+            target="_blank">image
+          </a>
+
+          by
+
+          <a class="credits__link" href="https://www.uplabs.com/prdvicky"
+            target="_blank">
+            Vicky Ardi
+          </a>
+        </p>
+      </div>
     `
 
     if (tasks.length === 0) {
-      tasksList.insertAdjacentHTML('beforeend', template)
+      d.querySelector('.todo-list-title').classList.toggle('hidden')
+      d.querySelector('main.todo').insertAdjacentHTML('beforeend', template)
     } else if (d.querySelector('.no-tasks-message') && tasks.length > 0) {
-      d.querySelector('.no-tasks-message').remove()
+      d.querySelector('.no-tasks-message').classList.replace('fade-in', 'fade-out')
+      d.querySelector('.no-tasks-message').addEventListener('animationend', () => {
+        d.querySelector('.no-tasks-message').remove()
+        d.querySelector('.todo-list-title').classList.toggle('hidden')
+      })
     }
   }
 
