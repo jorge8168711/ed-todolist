@@ -2,11 +2,26 @@
  * TASKS LISTA
  */
 
+.todo {
+  padding: 6rem;
+  width: calc(100% - var(--aside-width));
+
+  @media screen and (max-width: 720px) {
+    padding: 2rem 4em;
+    width: 100%;
+  }
+}
+
 .todo-list-title {
   color: var(--brand-color-accent);
   font-size: 1.5rem;
   font-weight: 900;
   margin: 2em 0 .5em;
+  transition: all .12s cubic-bezier(0.0, 0.0, 0.2, 1);
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 .todo-list {
@@ -16,6 +31,10 @@
   max-width: var(--content-max-width);
   margin: 0;
   padding: 0;
+
+  @media screen and (max-width: 720px) {
+    max-width: 100%;
+  }
 }
 
 .list-item {
@@ -36,7 +55,7 @@
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
-    animation: exitAnimation .18s cubic-bezier(0.4, 0.0, 1, 1) forwards;
+    animation: exitAnimation .15s cubic-bezier(0.4, 0.0, 1, 1) forwards;
   }
 
   &:not(:first-child) {
@@ -146,12 +165,6 @@
     opacity: 1;
     visibility: visible;
   }
-
-  // 60% {
-  //   transform: translateX(-30px);
-  //   opacity: .65;
-  //   visibility: visible;
-  // }
 
   100% {
     transform: translateX(70%);

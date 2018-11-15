@@ -5,4 +5,9 @@
 .wrapper {
   display: flex;
   min-height: 100vh;
+
+  @media screen and (max-width: 720px) {
+    flex-direction: column;
+    min-height: initial;
+  }
 }
