@@ -29,7 +29,7 @@ export default class Tasks {
     this.notify()
   }
 
-  complete (task, isComplete) {
+  toggleCompleteState (task, isComplete) {
     this.tasksArray[task].isComplete = isComplete
     this.updateLocalStorage()
     this.notify()
