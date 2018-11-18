@@ -5,6 +5,7 @@ import Tasks from './Tasks'
 // DOM ELEMENTS
 export const taskInput = d.querySelector('#taskInput')
 export const tasksList = d.querySelector('#todoList')
+export const completedTasksList = d.querySelector('#completedTasks')
 
 export const errorMessage = d.querySelector('#errorMessage')
 
@@ -18,3 +19,5 @@ taskInput.addEventListener('blur', () => { todoList.toggleErrorMessage(false) })
 // task-list listeners
 tasksList.addEventListener('click', e => { todoList.editTask(e) })
 tasksList.addEventListener('click', e => { todoList.removeTask(e) })
+completedTasksList.addEventListener('click', e => { todoList.editTask(e) })
+completedTasksList.addEventListener('click', e => { todoList.removeTask(e) })

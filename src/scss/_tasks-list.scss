@@ -18,6 +18,7 @@
   font-weight: 900;
   margin: 2em 0 .5em;
   transition: all .12s cubic-bezier(0.0, 0.0, 0.2, 1);
+
   &.hidden {
     opacity: 0;
     visibility: hidden;
@@ -37,13 +38,16 @@
   }
 }
 
-.list-item {
-  border-bottom: 1px solid var(--brand-color-primary-lightest);
-  font-size: 1rem;
-  position: relative;
-  padding-bottom: .5em;
-  padding-right: 30px;
+.completed-title {
+  color: var(--brand-color-primary-light);
+  font-size: .8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 3em 0 0;
+}
 
+.completed-title,
+.list-item {
   &.entry-animation {
     opacity: 0;
     visibility: hidden;
@@ -57,6 +61,14 @@
     transform: translateX(0);
     animation: exitAnimation .15s cubic-bezier(0.4, 0.0, 1, 1) forwards;
   }
+}
+
+.list-item {
+  border-bottom: 1px solid var(--brand-color-primary-lightest);
+  font-size: 1rem;
+  position: relative;
+  padding-bottom: .5em;
+  padding-right: 30px;
 
   &:not(:first-child) {
     margin-top: 1em;
